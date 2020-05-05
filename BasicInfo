@@ -1,0 +1,103 @@
+print("========================================================")
+print(" ____               _        _____          __")       
+print("|  _ \             (_)      |_   _|        / _|")       
+print("| |_) |  __ _  ___  _   ___   | |   _ __  | |_  ___")   
+print("|  _ <  / _` |/ __|| | / __|  | |  | '_ \ |  _|/ _ \")  
+print("| |_) || (_| |\__ \| || (__  _| |_ | | | || | | (_) |") 
+print("|____/  \__,_||___/|_| \___||_____||_| |_||_|  \___/")  
+print("========================================================")
+if params.len == 0 or params.len != 1 then exit ("USAGE: BasicInfo v1.3 [ip]")
+ip = params[0]
+if not is_valid_ip(params[0]) then ip = nslookup(params[0])
+if not is_valid_ip(ip) then exit ("<color=red>ERROR: "+params[0]+" is not a valid ip or website</color>")
+router = get_router(params[0])
+if not router then router = get_router(ip)
+if not router then exit ("<color=red>ERROR: No response from "+params[0]+"</color>")
+info = ""
+info = info + "<color=yellow>RemoteLanIps</color>: " + router.computers_lan_ip
+print("\n<color=green>YourLanIps</color>:" + get_router.computers_lan_ip)
+ports = router.used_ports
+for port in ports
+end for
+print (format_columns(info))
+print("========================================================")
+ip = params[0]
+if not is_valid_ip(params[0]) then ip = nslookup(params[0])
+if not is_valid_ip(ip) then exit ("<color=red>ERROR: "+params[0]+" is not a valid ip or website</color>")
+router = get_router(params[0])
+if not router then router = get_router(ip)
+if not router then exit ("<color=red>ERROR: No response from "+params[0]+"</color>")
+info = ""
+info = info + "<color=yellow>\nRemoteEssid</color>: " + router.essid_name
+info = info + "<color=yellow>\nRemoteBssid</color>: " + router.bssid_name
+print("<color=green>YourEssid</color>:" + get_router.essid_name)
+print("<color=green>YourBssid</color>:" + get_router.bssid_name)
+ports = router.used_ports
+for port in ports
+end for
+print (format_columns(info))
+print("========================================================")
+if not is_valid_ip(params[0]) then exit("nmap: invalid ip address")
+if not get_shell.host_computer.is_network_active then exit("nmap: can't connect. No internet access.")
+
+ipAddress = params[0]
+isLanIp = is_lan_ip( ipAddress )
+
+if isLanIp then
+	router = get_router;
+else 
+	router = get_router( ipAddress )
+end if
+
+if router == null then exit("nmap: ip address not found")
+
+isRouterIp = router.local_ip == ipAddress
+ports = null
+
+if not isLanIp or isRouterIp then
+	ports = router.used_ports
+else
+	ports = router.computer_ports(ipAddress)
+end if
+
+if ports == null then exit("nmap: ip address not found")
+
+info = "PORT STATE SERVICE VERSION LAN"   
+print("\nStarting nmap v1.1 at " + current_date)
+print("Interesting ports on " + params[0] + "\n")
+
+for port in ports
+	service_info = router.port_info(port)
+	lan_ips = port.get_lan_ip
+	port_status = "open"
+	
+	if(port.is_closed and not isLanIp) then
+		port_status = "closed"
+	end if
+	info = info + "\n" + port.port_number + " " + port_status + " " + service_info + " " + lan_ips
+end for
+print(format_columns(info) + "\n")
+print("========================================================")
+address = params[0]
+print(whois(address))
+end if
+print("========================================================")
+metaxploit = include_lib("/lib/metaxploit.so")
+if not metaxploit then
+	currentPath = get_shell.host_computer.current_path
+	metaxploit = include_lib(currentPath + "/metaxploit.so")
+end if
+if not metaxploit then exit("Error: Can't find metaxploit library in the /lib path or the current folder")
+address = params[0]
+if is_lan_ip(address) then exit("Error: only public IPs are allowed")
+
+net_session = metaxploit.net_use( address )
+if not net_session then exit("Error: can't connect to net session")
+
+libKernel = net_session.dump_lib
+libName = "kernel_router.so"
+print("Searching " + libName +" ...")
+
+if not libKernel then exit("Error: kernel_router.so not found")
+print("kernel_router.so found! version: " + libKernel.version)
+print("========================================================")

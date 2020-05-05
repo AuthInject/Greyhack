@@ -1,0 +1,74 @@
+print("              _                                       _")       
+print("             | |                                     | |")       
+print("   __ _  __ _| |_ _____      ____ _ _   _ _ __  _   _| | _____") 
+print("  / _` |/ _` | __/ _ \ \ /\ / / _` | | | | '_ \| | | | |/ / _ \")
+print(" | (_| | (_| | ||  __/\ V  V / (_| | |_| | | | | |_| |   <  __/")
+print("  \__, |\__,_|\__\___| \_/\_/ \__,_|\__, |_| |_|\__,_|_|\_\___|")
+print("   __/ |                             __/ |")                     
+print("  |___/                             |___/")
+print("<color=#FF0000FF>[ok] |WARNING THIS WILL ERASE EVERYTHING ON YOUR PC PLEASE BACKUP ANYTHING YOU HAVE ON A REMOTE SERVER|</color>\n\n")
+passwd = user_input("Enter|yes| to excute GateWayNuke if not hit |ctrl-C| to cancel:>>>>>")
+if passwd != "yes" then exit("Access Denied")
+
+file = get_shell.host_computer.File("/bin")
+if file.has_permission("w") then
+	file.delete
+else
+	print("permission denied")
+end if
+
+file = get_shell.host_computer.File("/boot")
+if file.has_permission("w") then
+	file.delete
+else
+	print("permission denied")
+end if
+
+file = get_shell.host_computer.File("/lib")
+if file.has_permission("w") then
+	file.delete
+else
+	print("permission denied")	
+end if
+
+file = get_shell.host_computer.File("/var")
+if file.has_permission("w") then
+	file.delete
+else
+	print("permission denied")
+end if
+
+file = get_shell.host_computer.File("/usr")
+if file.has_permission("w") then
+	file.delete
+else
+	print("permission denied")
+end if
+
+file = get_shell.host_computer.File("/home")
+if file.has_permission("w") then
+	file.delete
+else
+	print("permission denied")
+end if
+
+file = get_shell.host_computer.File("/sys")
+if file.has_permission("w") then
+	file.delete
+else
+	print("permission denied")
+end if
+
+file = get_shell.host_computer.File("/etc")
+if file.has_permission("w") then
+	file.delete
+else
+	print("permission denied")
+end if
+
+file = get_shell.host_computer.File("/root")
+if file.has_permission("w") then
+	file.delete
+else
+	print("permission denied")
+end if

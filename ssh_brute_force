@@ -1,0 +1,13 @@
+if params.len < 2 then exit("usage: <b>ssh_bruteforce [ip] [port]</b>")
+ip = params[0]
+port = params[1].to_int
+password_list = get_shell.host_computer.File("/example/exampledic").content.split("\n")
+if not get_router(ip) then exit("ip address not found")
+if not get_router(ip).ping_port(port) then exit("port can not pwn user :(")
+for password in password_list
+	server = get_shell.connect_service(ip,port,"root",password)
+	if server then
+		print("<b>user has been pwned</b>")
+		server.start_terminal
+	end if
+end for
